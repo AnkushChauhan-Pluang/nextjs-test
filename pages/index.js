@@ -6,11 +6,11 @@ export default function Home({ data }) {
   const [users, setUsers] = useState(data);
   const [sortOrder, setSortOrder] = useState('asc');
 
-  const sortUsersByName = () => {
+  const sortUsersByKey = (key) => {
     let sortedUsers = [...users]
     sortedUsers.sort((a, b) => {
-      if(a.name > b.name) return sortOrder === 'asc' ? 1 : -1
-      if(a.name < b.name) return sortOrder === 'asc' ? -1 : 1
+      if(a[key] > b[key]) return sortOrder === 'asc' ? 1 : -1
+      if(a[key] < b[key]) return sortOrder === 'asc' ? -1 : 1
       return 0
     })
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
@@ -25,18 +25,14 @@ export default function Home({ data }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="">Users list</div>
-      <button onClick={sortUsersByName}>Sort by Name {sortOrder === 'asc' ? '(a-z)' : '(z-a)'} </button>
-      {/* <pre>
-        {JSON.stringify(users, null, 2)}
-      </pre> */}
         <table>
           <tbody>
             <tr>
-              <th>S. No.</th>
-              <th>Name</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Phone</th>
+              <th><button onClick={() => sortUsersByKey('id')}>Id</button></th>
+              <th><button onClick={() => sortUsersByKey('name')}>Name</button></th>
+              <th><button onClick={() => sortUsersByKey('username')}>Username</button></th>
+              <th><button onClick={() => sortUsersByKey('email')}>Email</button></th>
+              <th><button onClick={() => sortUsersByKey('phone')}>Phone</button></th>
             </tr>
             {users && users.map(user => (
               <tr key={user.id}>
