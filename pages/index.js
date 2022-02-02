@@ -6,11 +6,19 @@ export default function Home({ data }) {
   const [users, setUsers] = useState(data);
   const [sortOrder, setSortOrder] = useState('asc');
 
+  const headers = [
+    { key: 'id', title: 'Id' },
+    { key: 'name', title: 'Name' },
+    { key: 'username', title: 'Username' },
+    { key: 'email', title: 'Email' },
+    { key: 'phone', title: 'Phone' },
+  ]
+
   const sortUsersByKey = (key) => {
     let sortedUsers = [...users]
     sortedUsers.sort((a, b) => {
-      if(a[key] > b[key]) return sortOrder === 'asc' ? 1 : -1
-      if(a[key] < b[key]) return sortOrder === 'asc' ? -1 : 1
+      if (a[key] > b[key]) return sortOrder === 'asc' ? 1 : -1
+      if (a[key] < b[key]) return sortOrder === 'asc' ? -1 : 1
       return 0
     })
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
@@ -25,26 +33,24 @@ export default function Home({ data }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="">Users list</div>
-        <table>
-          <tbody>
-            <tr>
-              <th><button onClick={() => sortUsersByKey('id')}>Id</button></th>
-              <th><button onClick={() => sortUsersByKey('name')}>Name</button></th>
-              <th><button onClick={() => sortUsersByKey('username')}>Username</button></th>
-              <th><button onClick={() => sortUsersByKey('email')}>Email</button></th>
-              <th><button onClick={() => sortUsersByKey('phone')}>Phone</button></th>
-            </tr>
-            {users && users.map(user => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>{user.username}</td>
-                <td>{user.email}</td>
-                <td>{user.phone}</td>
-              </tr>
+      <table>
+        <tbody>
+          <tr>
+            {headers.map(({ key, title }) => (
+              <th key={key}><button onClick={() => sortUsersByKey(key)}>{title}</button></th>
             ))}
-          </tbody>
-        </table>
+          </tr>
+          {users && users.map(user => (
+            <tr key={user.id}>
+              <td>{user.id}</td>
+              <td>{user.name}</td>
+              <td>{user.username}</td>
+              <td>{user.email}</td>
+              <td>{user.phone}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }
