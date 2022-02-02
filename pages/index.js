@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { useState } from 'react';
 
 export default function Home({ data }) {
@@ -34,19 +35,26 @@ export default function Home({ data }) {
       <div className="text-3xl py-4">Sortable Users table</div>
       <div className='border rounded-xl overflow-hidden'>
         <table className='min-w-full divide-y'>
-          <thead className='bg-gray-100'>
+          <thead className='bg-gray-600'>
             <tr>
               {headers.map(({ key, title }) => (
+                <th key={key} className='px-3 py-2 text-left text-gray-200 font-semibold uppercase'>
+                  <button onClick={() => sortUsersByKey(key)}>{title}</button>
                 <th key={key} className='px-3 py-2 text-left text-gray-500 font-semibold uppercase'><button onClick={() => sortUsersByKey(key)}>{title}</button></th>
+                </th>
               ))}
             </tr>
           </thead>
           <tbody className='divide-y'>
             {users && users.map(user => (
-              <tr key={user.id}>
+              <tr key={user.id} className='hover:bg-gray-100'>
                 <td className='px-3 py-2'>{user.id}</td>
                 <td className='px-3 py-2'>{user.name}</td>
-                <td className='px-3 py-2'>{user.username}</td>
+                <td className='px-3 py-2'>
+                  <Link href={`/user/${user.username}?id=${user.id}`}>
+                    <a className='py-2 transition-all hover:underline hover:text-indigo-500'>{user.username}</a>
+                  </Link>
+                </td>
                 <td className='px-3 py-2'>{user.email}</td>
                 <td className='px-3 py-2'>{user.phone}</td>
               </tr>
