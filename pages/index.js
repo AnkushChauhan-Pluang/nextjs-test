@@ -1,8 +1,22 @@
 import Head from 'next/head'
-import Image from 'next/image'
+import { useState } from 'react';
 import styles from '../styles/Home.module.css'
 
 export default function Home({ data }) {
+  const [users, setUsers] = useState(data);
+  const [sortOrder, setSortOrder] = useState('asc');
+
+  const sortUsersByName = () => {
+    let sortedUsers = [...users]
+    sortedUsers.sort((a, b) => {
+      if(a.name > b.name) return sortOrder === 'asc' ? 1 : -1
+      if(a.name < b.name) return sortOrder === 'asc' ? -1 : 1
+      return 0
+    })
+    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+    setUsers(sortedUsers)
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -11,9 +25,30 @@ export default function Home({ data }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="">Users list</div>
-      <pre>
-        {JSON.stringify(data, null, 2)}
-      </pre>
+      <button onClick={sortUsersByName}>Sort by Name {sortOrder === 'asc' ? '(a-z)' : '(z-a)'} </button>
+      {/* <pre>
+        {JSON.stringify(users, null, 2)}
+      </pre> */}
+        <table>
+          <tbody>
+            <tr>
+              <th>S. No.</th>
+              <th>Name</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Phone</th>
+            </tr>
+            {users && users.map(user => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td>{user.phone}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
     </div>
   )
 }
