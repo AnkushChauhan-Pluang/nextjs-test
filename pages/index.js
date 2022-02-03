@@ -1,9 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useState } from "react";
-import Head from 'next/head';
-import Link from 'next/link';
-import { useState } from 'react';
 
 export default function Home({ data }) {
   const [users, setUsers] = useState(data);
@@ -24,13 +21,7 @@ export default function Home({ data }) {
       // if (a[key] > b[key]) return sortOrder === 'asc' ? 1 : -1
       // if (a[key] < b[key]) return sortOrder === 'asc' ? -1 : 1
       // return 0
-      return a[key] > b[key]
-        ? sortOrder === "asc"
-          ? 1
-          : -1
-        : sortOrder === "asc"
-        ? -1
-        : 1;
+      return a[key] > b[key] ? (sortOrder === "asc" ? 1 : -1) : (sortOrder === "asc" ? -1 : 1);
     });
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     setUsers(sortedUsers);
@@ -76,7 +67,6 @@ export default function Home({ data }) {
                   key={key}
                   className="px-3 py-2 text-left text-gray-200 font-semibold uppercase">
                   <button onClick={() => sortUsersByKey(key)}>{title}</button>
-                <th key={key} className='px-3 py-2 text-left text-gray-500 font-semibold uppercase'><button onClick={() => sortUsersByKey(key)}>{title}</button></th>
                 </th>
               ))}
             </tr>
