@@ -16,9 +16,7 @@ export default function Home({ data }) {
   const sortUsersByKey = (key) => {
     let sortedUsers = [...users]
     sortedUsers.sort((a, b) => {
-      if (a[key] > b[key]) return sortOrder === 'asc' ? 1 : -1
-      if (a[key] < b[key]) return sortOrder === 'asc' ? -1 : 1
-      return 0
+      return (a[key] > b[key]) ? (sortOrder === 'asc' ? 1 : -1) : (sortOrder === 'asc' ? -1 : 1)
     })
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
     setUsers(sortedUsers)
