@@ -1,20 +1,22 @@
-import Head from 'next/head';
-import { useState } from 'react';
+import Head from "next/head";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function Home({ data }) {
   const [users, setUsers] = useState(data);
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [filterVal, setFilterVal] = useState(null);
 
   const headers = [
-    { key: 'id', title: 'Id' },
-    { key: 'name', title: 'Name' },
-    { key: 'username', title: 'Username' },
-    { key: 'email', title: 'Email' },
-    { key: 'phone', title: 'Phone' },
-  ]
+    { key: "id", title: "Id" },
+    { key: "name", title: "Name" },
+    { key: "username", title: "Username" },
+    { key: "email", title: "Email" },
+    { key: "phone", title: "Phone" },
+  ];
 
-  const sortUsersByKey = (key) => {
-    let sortedUsers = [...users]
+  const sortUsersByKey = key => {
+    let sortedUsers = [...users];
     sortedUsers.sort((a, b) => {
       return (a[key] > b[key]) ? (sortOrder === 'asc' ? 1 : -1) : (sortOrder === 'asc' ? -1 : 1)
     })
@@ -30,34 +32,60 @@ export default function Home({ data }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="text-3xl py-4">Sortable Users table</div>
-      <div className='border rounded-xl overflow-hidden'>
-        <table className='min-w-full divide-y'>
-          <thead className='bg-gray-100'>
+      <h3 className="mb-1">Filter</h3>
+      <input
+        type="text"
+        placeholder="Name/Username"
+        className="border border-gray-400 rounded px-3 py-2 text-xs placeholder:text-xs focus:border-gray-600 focus:ring-gray-600"
+        onChange={e => setFilterVal(e.target.value)}
+      />
+      <button
+        className="border border-black rounded bg-black text-white text-xs px-5 py-2 ml-6"
+        onClick={filterUsers}>
+        Search
+      </button>
+      <div className="border rounded-xl mt-4 overflow-hidden">
+        <table className="min-w-full divide-y">
+          <thead className="bg-gray-600">
             <tr>
               {headers.map(({ key, title }) => (
-                <th key={key} className='px-3 py-2 text-left text-gray-500 font-semibold uppercase'><button onClick={() => sortUsersByKey(key)}>{title}</button></th>
+                <th
+                  key={key}
+                  className="px-3 py-2 text-left text-gray-200 font-semibold uppercase">
+                  <button onClick={() => sortUsersByKey(key)}>{title}</button>
+                </th>
               ))}
             </tr>
           </thead>
-          <tbody className='divide-y'>
-            {users && users.map(user => (
-              <tr key={user.id}>
-                <td className='px-3 py-2'>{user.id}</td>
-                <td className='px-3 py-2'>{user.name}</td>
-                <td className='px-3 py-2'>{user.username}</td>
-                <td className='px-3 py-2'>{user.email}</td>
-                <td className='px-3 py-2'>{user.phone}</td>
-              </tr>
-            ))}
+          <tbody className="divide-y">
+            {users &&
+              users.map(user => (
+                <tr key={user.id} className="hover:bg-gray-100">
+                  <td className="px-3 py-2">{user.id}</td>
+                  <td className="px-3 py-2">{user.name}</td>
+                  <td className="px-3 py-2">
+                    <Link href={`/user/${user.username}?id=${user.id}`}>
+                      <a className="py-2 transition-all hover:underline hover:text-indigo-500">
+                        {user.username}
+                      </a>
+                    </Link>
+                  </td>
+                  <td className="px-3 py-2">{user.email}</td>
+                  <td className="px-3 py-2">{user.phone}</td>
+                </tr>
+              ))}
           </tbody>
         </table>
+        {!users.length > 0 && (
+          <div className="text-center p-10">No data found</div>
+        )}
       </div>
     </div>
-  )
+  );
 }
 
 export const getServerSideProps = async () => {
-  const res = await fetch('https://jsonplaceholder.typicode.com/users')
-  const data = (await res.json());
-  return { props: { data } }
-}
+  const res = await fetch("https://jsonplaceholder.typicode.com/users");
+  const data = await res.json();
+  return { props: { data } };
+};
