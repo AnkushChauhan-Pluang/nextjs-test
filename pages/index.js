@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export default function Home({ data }) {
   const [users, setUsers] = useState(data);
-  const [sortOrder, setSortOrder] = useState("asc");
+  const [isAscending, setIsAscending] = useState(true);
   const [filterVal, setFilterVal] = useState(null);
 
   const headers = [
@@ -18,9 +18,9 @@ export default function Home({ data }) {
   const sortUsersByKey = key => {
     let sortedUsers = [...users];
     sortedUsers.sort((a, b) => {
-      return a[key] > b[key] ? (sortOrder === "asc" ? 1 : -1) : (sortOrder === "asc" ? -1 : 1);
+      return a[key] > b[key] ? (isAscending ? 1 : -1) : a[key] < b[key] ? (isAscending ? -1 : 1) : 0;
     });
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    setIsAscending(!isAscending);
     setUsers(sortedUsers);
   };
 
